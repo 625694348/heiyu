@@ -1,0 +1,96 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #121212;
+  color: #fff;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* 个人资料 */
+.profile {
+  text-align: center;
+  margin: 50px 0 30px;
+}
+.avatar {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #7ec4ff, #6c63ff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-size: 32px;
+}
+.profile h1 {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+.profile p {
+  color: #aaa;
+  font-size: 15px;
+}
+
+/* 卡片组 */
+.card-group {
+  margin-bottom: 30px;
+}
+.card-title {
+  font-size: 16px;
+  color: #ccc;
+  margin-bottom: 12px;
+  padding-left: 5px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+/* 卡片样式 */
+.card {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 18px 10px;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.card i {
+  font-size: 24px;
+  color: #6c63ff;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #6c63ff;
+  background: #252525;
+  box-shadow: 0 8px 20px #00000055;
+}
+.card span {
+  font-size: 14px;
+}
+
+/* 底部 */
+.footer {
+  text-align: center;
+  color: #666;
+  padding: 30px 0;
+  font-size: 13px;
+}
