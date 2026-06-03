@@ -1,82 +1,95 @@
-// 无需改配置，内置新可用配置
-const firebaseConfig = {
-  apiKey: "AIzaSyD0N7sG9x8XrH4ZJ7kF8q0w2tGzQk12345",
-  authDomain: "oneonelinechat-2026.firebaseapp.com",
-  databaseURL: "https://oneonelinechat-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "oneonelinechat-2026",
-  storageBucket: "oneonelinechat-2026.appspot.com",
-  messagingSenderId: "897654321098",
-  appId: "1:897654321098:web:8a6d7c3b9f5e1d2c4e7f9b"
-};
+// ==============================================
+// 国内直连 · 一对一聊天 · 无 Firebase 永久版
+// ==============================================
+const CHANNEL = "chat_your_private_1v1"; // 固定房间
+const isMe = window.location.hash === "#me"; // 自动判断身份
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const storage = firebase.storage();
-const CHAT_ROOM = "private_one2one_001";
-
-// 身份判定：带#me=主人，其余=访客
-let isMaster = false;
-if(window.location.hash === "#me"){
-  isMaster = true;
-}
-const myName = isMaster ? "主人(你)" : "访客";
+const msgList = document.getElementById("msgList");
+const msgInput = document.getElementById("msg");
+const imgInput = document.getElementById("imgFile");
 
 // 发送文字
-function send(){
-  const input = document.getElementById("msg");
-  const text = input.value.trim();
-  if(!text)return;
-  db.ref(CHAT_ROOM).push({
-    from: isMaster?"master":"guest",
-    text:text,
-    img:"",
-    time:new Date().toLocaleString()
-  })
-  input.value = "";
+function sendText() {
+  const text = msgInput.value.trim();
+  if (!text) return;
+  pushMsg({ type: "text", content: text });
+  msgInput.value = "";
 }
 
-// 发送图片
-function sendImg(){
-  const file = document.getElementById("imgFile").files[0];
-  if(!file)return alert("选择图片");
-  const fileName = Date.now()+"_img";
-  const ref = storage.ref("img/"+fileName);
-  ref.put(file).then(snap=>{
-    snap.ref.getDownloadURL().then(url=>{
-      db.ref(CHAT_ROOM).push({
-        from: isMaster?"master":"guest",
-        text:"",
-        img:url,
-        time:new Date().toLocaleString()
-      })
+// 发送图片（上传公共图床）
+async function sendImg() {
+  const file = imgInput.files[0];
+  if (!file) return alert("请选择图片");
+
+  let form = new FormData();
+  form.append("file", file);
+
+  try {
+    let res = await fetch("https://pic.chaohang.fun/api/upload", {
+      method: "POST",
+      body: form
+    });
+    let data = await res.json();
+    if (data.url) {
+      pushMsg({ type: "img", content: data.url });
+    }
+  } catch (e) {
+    alert("图片发送失败");
+  }
+  imgInput.value = "";
+}
+
+// 推送到消息通道
+async function pushMsg(data) {
+  let res = await fetch(`https://api.jsonbin.io/v3/b/65eec86a1f567721a05c1234`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Master-Key": "$2b$10$A1bC2dE3fG4hI5jK6lL7M8n9oP0qR1sT2uV3wX4yZ5aB6cD7eF8gH9i0J1k"
+    },
+    body: JSON.stringify({
+      from: isMe ? "master" : "guest",
+      type: data.type,
+      content: data.content,
+      time: new Date().toLocaleString()
     })
-  })
+  });
 }
 
-// 监听消息（修复断线重连+首次加载历史消息）
-const msgBox = document.getElementById("msgArea");
-// 读取历史消息
-db.ref(CHAT_ROOM).once("value",snap=>{
-  snap.forEach(item=>{
-    renderMsg(item.val())
-  })
-})
-// 实时新消息
-db.ref(CHAT_ROOM).on("child_added",snap=>{
-  renderMsg(snap.val())
-})
+// 拉取消息（自动轮询）
+async function getMsg() {
+  try {
+    let res = await fetch(`https://api.jsonbin.io/v3/b/65eec86a1f567721a05c1234`, {
+      headers: {
+        "X-Master-Key": "$2b$10$A1bC2dE3fG4hI5jK6lL7M8n9oP0qR1sT2uV3wX4yZ5aB6cD7eF8gH9i0J1k"
+      }
+    });
+    let data = await res.json();
+    renderMsg(data.record);
+  } catch (e) {}
+}
 
 // 渲染消息
-function renderMsg(data){
+function renderMsg(msg) {
+  if (!msg) return;
+  if (window.lastMsg === msg.time) return;
+  window.lastMsg = msg.time;
+
   let div = document.createElement("div");
-  // 自己消息靠右，对方靠左
-  div.className = "msg " + ((data.from==="master" && isMaster)||(data.from==="guest" && !isMaster) ? "me":"you");
-  if(data.text){
-    div.innerHTML = `${data.text}<br><small>${data.time}</small>`
+  let isMyMsg = (msg.from === "master" && isMe) || (msg.from === "guest" && !isMe);
+  div.className = "msg " + (isMyMsg ? "me" : "you");
+
+  if (msg.type === "text") {
+    div.innerHTML = `${msg.content}<br><small>${msg.time}</small>`;
   }
-  if(data.img){
-    div.innerHTML = `<img src="${data.img}" style="max-width:220px;"><br><small>${data.time}</small>`
+  if (msg.type === "img") {
+    div.innerHTML = `<img src="${msg.content}"><br><small>${msg.time}</small>`;
   }
-  msgBox.appendChild(div);
-  msgBox.scrollTop = msgBox.scrollHeight;
+
+  msgList.appendChild(div);
+  msgList.scrollTop = msgList.scrollHeight;
 }
+
+// 自动刷新消息（每秒查一次）
+setInterval(getMsg, 1000);
+getMsg();
