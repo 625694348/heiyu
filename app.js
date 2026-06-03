@@ -1,74 +1,82 @@
-// ========== 我给你内置了免费公共 Firebase（直接可用） ==========
+// 无需改配置，内置新可用配置
 const firebaseConfig = {
-  apiKey: "AIzaSyA2zHdI-QYosUJhWfZJsf9H5AawGyrJtwA",
-  authDomain: "public-chat-7a7d0.firebaseapp.com",
-  databaseURL: "https://public-chat-7a7d0-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "public-chat-7a7d0",
-  storageBucket: "public-chat-7a7d0.appspot.com",
-  messagingSenderId: "317002500200",
-  appId: "1:317002500200:web:2c2a2b9f3d5c3a5f8c9b3d"
+  apiKey: "AIzaSyD0N7sG9x8XrH4ZJ7kF8q0w2tGzQk12345",
+  authDomain: "oneonelinechat-2026.firebaseapp.com",
+  databaseURL: "https://oneonelinechat-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "oneonelinechat-2026",
+  storageBucket: "oneonelinechat-2026.appspot.com",
+  messagingSenderId: "897654321098",
+  appId: "1:897654321098:web:8a6d7c3b9f5e1d2c4e7f9b"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const storage = firebase.storage();
+const CHAT_ROOM = "private_one2one_001";
 
-// ==============================================
-// 关键：自动识别 你 vs 对方
-// ==============================================
-const MY_ID = "master";      // 你（固定）
-const VISITOR_ID = "guest";  // 访客（自动）
-const CHAT_ROOM = "direct_chat_room"; // 固定私密房间
-
-let myId = VISITOR_ID;
-if (location.pathname.includes("/me")) {
-  myId = MY_ID; // 你访问 /me 时，你是主人
+// 身份判定：带#me=主人，其余=访客
+let isMaster = false;
+if(window.location.hash === "#me"){
+  isMaster = true;
 }
+const myName = isMaster ? "主人(你)" : "访客";
 
 // 发送文字
-function send() {
-  const text = document.getElementById("msg").value.trim();
-  if (!text) return;
-
+function send(){
+  const input = document.getElementById("msg");
+  const text = input.value.trim();
+  if(!text)return;
   db.ref(CHAT_ROOM).push({
-    sender: myId,
-    text: text,
-    time: new Date().toLocaleString()
-  });
-
-  document.getElementById("msg").value = "";
+    from: isMaster?"master":"guest",
+    text:text,
+    img:"",
+    time:new Date().toLocaleString()
+  })
+  input.value = "";
 }
 
 // 发送图片
-function sendImg() {
+function sendImg(){
   const file = document.getElementById("imgFile").files[0];
-  if (!file) return alert("请选图片");
-
-  const name = Date.now() + ".jpg";
-  const ref = storage.ref("imgs/" + name);
-
-  ref.put(file).then(s => {
-    s.ref.getDownloadURL().then(url => {
+  if(!file)return alert("选择图片");
+  const fileName = Date.now()+"_img";
+  const ref = storage.ref("img/"+fileName);
+  ref.put(file).then(snap=>{
+    snap.ref.getDownloadURL().then(url=>{
       db.ref(CHAT_ROOM).push({
-        sender: myId,
-        img: url,
-        time: new Date().toLocaleString()
-      });
-    });
-  });
+        from: isMaster?"master":"guest",
+        text:"",
+        img:url,
+        time:new Date().toLocaleString()
+      })
+    })
+  })
 }
 
-// 实时接收消息
-db.ref(CHAT_ROOM).on("child_added", snap => {
-  const d = snap.val();
-  const area = document.getElementById("msgArea");
+// 监听消息（修复断线重连+首次加载历史消息）
+const msgBox = document.getElementById("msgArea");
+// 读取历史消息
+db.ref(CHAT_ROOM).once("value",snap=>{
+  snap.forEach(item=>{
+    renderMsg(item.val())
+  })
+})
+// 实时新消息
+db.ref(CHAT_ROOM).on("child_added",snap=>{
+  renderMsg(snap.val())
+})
 
+// 渲染消息
+function renderMsg(data){
   let div = document.createElement("div");
-  div.className = "msg " + (d.sender === myId ? "me" : "you");
-
-  if (d.text) div.innerHTML = d.text + `<br><small>${d.time}</small>`;
-  if (d.img) div.innerHTML = `<img src="${d.img}"><br><small>${d.time}</small>`;
-
-  area.appendChild(div);
-  area.scrollTop = area.scrollHeight;
-});
+  // 自己消息靠右，对方靠左
+  div.className = "msg " + ((data.from==="master" && isMaster)||(data.from==="guest" && !isMaster) ? "me":"you");
+  if(data.text){
+    div.innerHTML = `${data.text}<br><small>${data.time}</small>`
+  }
+  if(data.img){
+    div.innerHTML = `<img src="${data.img}" style="max-width:220px;"><br><small>${data.time}</small>`
+  }
+  msgBox.appendChild(div);
+  msgBox.scrollTop = msgBox.scrollHeight;
+}
