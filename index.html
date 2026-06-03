@@ -2,26 +2,22 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>和我聊天</title>
+  <title>一对一聊天</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="chat-box">
-    <div class="title">👤 与我一对一聊天</div>
-    <div id="msgArea"></div>
+    <div class="top">💬 一对一私密聊天</div>
+    <div id="msgList"></div>
 
-    <div class="input-bar">
+    <div class="inputBox">
       <input type="text" id="msg" placeholder="输入消息...">
-      <button onclick="send()">发送</button>
+      <button onclick="sendText()">发送</button>
       <input type="file" id="imgFile" accept="image/*">
       <button onclick="sendImg()">发图</button>
     </div>
   </div>
 
-  <!-- Firebase 我已经帮你配好免费版 -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
