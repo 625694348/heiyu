@@ -3,282 +3,186 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>黑彧科技控制台</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,"Microsoft YaHei",sans-serif;color:#eee;text-decoration:none;list-style:none;}
-    body{
-      background:#0c0c10;
-      min-height:100vh;
-      display:flex;
-      flex-direction:row;
-      /* 科技网点背景，在线资源，Github打开正常加载 */
-      background-image: radial-gradient(#00cccc20 1px,transparent 1px);
-      background-size:40px 40px;
-    }
+<title>NEXUS LINK - 黑彧科技控制台</title>
+<style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui, -apple-system, "Microsoft YaHei", sans-serif;color:#eee;text-decoration:none;list-style:none;}
+    body{background:#0c0c10;min-height:100vh;display:flex;flex-direction:row;background-image: radial-gradient(#00cccc20 1px,transparent 1px);background-size:40px 40px;}
 
-    /* 左侧边栏 */
-    .sidebar-left{
-      width:240px;
-      background:#11121a;
-      border-right:1px solid #00cccc33;
-      padding:30px 16px;
-    }
-    .sidebar-left h2{
-      color:#00cccc;
-      font-size:24px;
-      margin-bottom:24px;
-      border-bottom:2px solid #00cccc;
-      padding-bottom:8px;
-    }
-    .menu{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:14px 12px;
-      background:#1a1b26;
-      border-radius:8px;
-      margin-bottom:10px;
-      transition:all 0.25s ease;
-      cursor:pointer;
-    }
-    .menu:hover{
-      background:#27293d;
-      box-shadow:0 0 8px #00cccc30;
-    }
-    .menu.active{
-      background:#ffcc0022;
-      border:1px solid #ffcc00;
-    }
+    /* 左侧工具栏 */
+    .sidebar-left{width:240px;background:#11121a;border-right:1px solid #00cccc33;padding:30px 16px;}
+    .sidebar-left h2{color:#00cccc;font-size:24px;margin-bottom:24px;border-bottom:2px solid #00cccc;padding-bottom:8px;}
+    .menu{display:flex;align-items:center;gap:10px;padding:14px 12px;background:#1a1b26;border-radius:8px;margin-bottom:10px;transition:0.2s;cursor:pointer;}
+    .menu:hover{background:#27293d;box-shadow:0 0 8px #00cccc30;}
+    .menu.active{background:#ffcc0022;border:1px solid #ffcc00;}
 
-    /* 中间主区域 */
+    /* 中间主内容 */
     .main{flex:1;padding:40px 30px;}
     .header{text-align:center;position:relative;margin-bottom:40px;}
     .header h1{font-size:54px;color:#fff;letter-spacing:2px;}
     .header .sub{font-size:22px;color:#00cccc;margin:8px 0 24px;}
-    .user-btns{position:absolute;top:0;right:0;display:flex;gap:8px;}
-    .btn{
-      padding:10px 20px;
-      border:none;
-      border-radius:6px;
-      background:#0099cc;
-      color:white;
-      cursor:pointer;
-      transition:0.2s;
-    }
-    .btn:hover{filter:brightness(1.15);box-shadow:0 0 6px #0099cc60;}
-    .btn.register{background:#00ccff;}
-    .player{
-      max-width:340px;
-      margin:0 auto;
-      padding:12px 20px;
-      background:#2a1038;
-      border:1px solid #d84cff;
-      border-radius:99px;
-      text-align:center;
-      color:#e99dff;
-    }
+    .player{max-width:340px;margin:0 auto;padding:12px 20px;background:#2a1038;border:1px solid #d84cff;border-radius:999px;text-align:center;color:#e99dff;}
 
-    /* 卡片布局+hover发光特效 */
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:20px;
-    }
-    .card{
-      background:#181822;
-      border:1px solid #333344;
-      border-radius:10px;
-      padding:24px;
-      position:relative;
-      min-height:210px;
-      transition:all 0.3s ease;
-      cursor:pointer;
-    }
-    .card:hover{
-      border-color:#00cccc80;
-      box-shadow:0 0 18px #00cccc35;
-      transform:translateY(-4px);
-    }
-    .card.hot{
-      border-color:#ffcc00;
-      background:#221f12;
-      box-shadow:0 0 14px #ffcc0022;
-    }
-    .tag{
-      position:absolute;
-      top:12px;
-      right:12px;
-      padding:3px 8px;
-      border-radius:4px;
-      font-size:12px;
-    }
+    /* 卡片网格 */
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+    .card{background:#181822;border:1px solid #333344;border-radius:10px;padding:24px;position:relative;min-height:210px;transition:all 0.3s ease;cursor:pointer;}
+    .card:hover{border-color:#00cccc80;box-shadow:0 0 18px #00cccc35;transform:translateY(-4px);}
+    .card.hot{border-color:#ffcc00;background:#221f12;box-shadow:0 0 14px #ffcc0022;}
+    .tag{position:absolute;top:12px;right:12px;padding:3px 8px;border-radius:4px;font-size:12px;}
     .tag.new{background:#ffcc00;color:#111;}
     .tag.hot{background:#d62868;}
     .card .icon{font-size:34px;margin-bottom:12px;}
     .card h3{margin-bottom:10px;font-size:18px;}
     .card p{color:#aaa;font-size:13px;line-height:1.5;}
 
-    /* 右侧边栏 */
-    .sidebar-right{
-      width:260px;
-      background:#11121a;
-      border-left:1px solid #00cccc33;
-      padding:30px 16px;
-    }
-    .sidebar-right h2{
-      color:#00cccc;
-      font-size:24px;
-      margin-bottom:24px;
-      border-bottom:2px solid #00cccc;
-      padding-bottom:8px;
-    }
-    .link-item{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:16px 12px;
-      background:#1a1b26;
-      border-radius:8px;
-      margin-bottom:12px;
-      transition:0.25s;
-      cursor:pointer;
-    }
-    .link-item:hover{
-      background:#27293d;
-      box-shadow:0 0 8px #00cccc30;
-    }
+    /* 右侧链接栏 */
+    .sidebar-right{width:260px;background:#11121a;border-left:1px solid #00cccc33;padding:30px 16px;}
+    .sidebar-right h2{color:#00cccc;font-size:24px;margin-bottom:24px;border-bottom:2px solid #00cccc;padding-bottom:8px;}
+    .link-item{display:flex;align-items:center;gap:10px;padding:16px 12px;background:#1a1b26;border-radius:8px;margin-bottom:12px;transition:0.25s;cursor:pointer;}
+    .link-item:hover{background:#27293d;box-shadow:0 0 8px #00cccc30;}
 
-    /* 移动端自适应 */
-    @media(max-width:1100px){
-      body{flex-direction:column;}
-      .sidebar-left,.sidebar-right{width:100%;border:0;border-bottom:1px solid #00cccc33;}
-      .cards{grid-template-columns:repeat(2,1fr);}
-    }
-    @media(max-width:600px){
-      .cards{grid-template-columns:1fr;}
-      .header h1{font-size:36px;}
-      .user-btns{position:relative;margin-bottom:15px;display:flex;justify-content:center;}
-      .main{padding:20px 15px;}
-    }
-  </style>
+/* 弹窗样式 */
+.modal{
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.7);
+  z-index:9999;
+}
+.modal-box{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:700px;
+  background:#11121a;
+  border:2px solid #00cccc;
+  border-radius:12px;
+  padding:40px 30px;
+}
+.modal-close{
+  position:absolute;
+  top:20px;right:25px;
+  font-size:28px;
+  color:#ccc;
+  cursor:pointer;
+}
+.modal-title{
+  font-size:26px;
+  color:#fff;
+  margin-bottom:25px;
+  text-align:center;
+}
+.modal-item{
+  background:#1a1b26;
+  padding:18px 20px;
+  border-radius:10px;
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+.modal-item a{display:flex;align-items:center;gap:15px;width:100%;}
+.modal-item:hover{background:#27293d;box-shadow:0 0 8px #00cccc30;}
+.modal-item span{font-size:24px;}
+.modal-item .text h4{font-size:17px;color:#fff;margin-bottom:4px;}
+.modal-item .text p{font-size:13px;color:#aaa;}
+</style>
 </head>
-
 <body>
-<!-- 左侧TOOLS -->
+
+<!-- 左侧 TOOLS -->
 <div class="sidebar-left">
   <h2>TOOLS</h2>
-  <a href="#">
-    <div class="menu"><span>🌐</span><span>查询工具</span></div>
-  </a>
-  <a href="#">
-    <div class="menu"><span>⬇</span><span>软件下载</span></div>
-  </a>
-  <a href="#">
-    <div class="menu"><span>⏱</span><span>测速工具</span></div>
-  </a>
-  <a href="#">
-    <div class="menu"><span>>_</span><span>命令终端</span></div>
-  </a>
-  <a href="#">
-    <div class="menu"><span>📄</span><span>代理技术文档</span></div>
-  </a>
-  <a href="#">
-    <div class="menu"><span>🌐</span><span>域名优选</span></div>
-  </a>
-  <a href="#">
-    <div class="menu active"><span>⚡</span><span>6月3日免费网络</span></div>
-  </a>
+  <div class="menu" onclick="openModal(1)">🌐 查询工具</div>
+  <div class="menu" onclick="openModal(2)">⬇ 软件下载</div>
+  <div class="menu" onclick="openModal(3)">⏱ 测速工具</div>
+  <div class="menu" onclick="openModal(4)">＞_ 命令终端</div>
+  <div class="menu" onclick="openModal(5)">📄 代理技术文档</div>
+  <div class="menu" onclick="openModal(6)">🌐 域名优选</div>
+  <div class="menu active" onclick="openModal(7)">⚡ 6月3日免费网络</div>
 </div>
 
-<!-- 中间主体内容 -->
+<!-- 中间主体 -->
 <div class="main">
   <div class="header">
-    <div class="user-btns">
-     
-    </div>
     <h1>NEXUS LINK</h1>
     <div class="sub">黑彧科技控制台</div>
     <div class="player">正在播放：褪黑素·梓渝</div>
   </div>
 
   <div class="cards">
-    <a href="#" target="_blank">
-      <div class="card hot">
-        <div class="tag new">NEW</div>
-        <div class="icon">▶</div>
-        <h3>视频搭建教程</h3>
-        <p>精华课程，国内独家内容，从0到1配置网络、手机号、独立站，完美运营海外电商</p>
-      </div>
-    </a>
-    <a href="#" target="_blank">
-      <div class="card">
-        <div class="icon">🛒</div>
-        <h3>账号购买</h3>
-        <p>苹果带📝谷歌号|TK白号|ChatGPT等</p>
-      </div>
-    </a>
-    <a href="#" target="_blank">
-      <div class="card">
-        <div class="icon">✈</div>
-        <h3>专线机场</h3>
-        <p>稳定高速|科学必备|AI专用</p>
-      </div>
-    </a>
-    <a href="#" target="_blank">
-      <div class="card">
-        <div class="icon">🏠</div>
-        <h3>静态住宅IP</h3>
-        <p>原生住宅代理|短视频必备</p>
-      </div>
-    </a>
-    <a href="#" target="_blank">
-      <div class="card">
-        <div class="icon">🗄️</div>
-        <h3>软路由现货</h3>
-        <p>全屋网络|工作室首选|24H发货</p>
-      </div>
-    </a>
-    <a href="#" target="_blank">
-      <div class="card">
-        <div class="icon">☁</div>
-        <h3>VPS服务器</h3>
-        <p>自建节点|纯净住宅VPS</p>
-      </div>
-    </a>
-    <a href="#" target="_blank">
-      <div class="card">
-        <div class="icon">☎</div>
-        <h3>手机号 & 防关联</h3>
-        <p>海外号码接码|多账号防关联</p>
-      </div>
-    </a>
-    <a href="#" target="_blank">
-      <div class="card">
-        <div class="tag hot">HOT</div>
-        <div class="icon">⚙️</div>
-        <h3>NBN视频创作母体</h3>
-        <p>AI全自动化流水线|视频切片、二创</p>
-      </div>
-    </a>
+    <div class="card hot"><div class="tag new">NEW</div><div class="icon">▶</div><h3>视频搭建教程</h3><p>精华课程，国内独家内容，从0到1配置网络、手机号、独立站，完美运营海外电商</p></div>
+    <div class="card"><div class="icon">🛒</div><h3>账号购买</h3><p>苹果带📝谷歌号|TK白号|ChatGPT等</p></div>
+    <div class="card"><div class="icon">✈</div><h3>专线机场</h3><p>稳定高速|科学必备|AI专用</p></div>
+    <div class="card"><div class="icon">🏠</div><h3>静态住宅IP</h3><p>原生住宅代理|短视频必备</p></div>
+    <div class="card"><div class="icon">🗄️</div><h3>软路由现货</h3><p>全屋网络|工作室首选|24H发货</p></div>
+    <div class="card"><div class="icon">☁</div><h3>VPS服务器</h3><p>自建节点|纯净住宅VPS</p></div>
+    <div class="card"><div class="icon">☎</div><h3>手机号 & 防关联</h3><p>海外号码接码|多账号防关联</p></div>
+    <div class="card"><div class="tag hot">HOT</div><div class="icon">⚙️</div><h3>NBN视频创作母体</h3><p>AI全自动化流水线|视频切片、二创</p></div>
   </div>
 </div>
 
-<!-- 右侧LINKS -->
+<!-- 右侧 LINKS -->
 <div class="sidebar-right">
   <h2>LINKS</h2>
-  <a href="#" target="_blank">
-    <div class="link-item"><span>⇗</span><span>联系站长</span></div>
-  </a>
-  <a href="#" target="_blank">
-    <div class="link-item"><span>▶</span><span>流媒体大全</span></div>
-  </a>
-  <a href="#" target="_blank">
-    <div class="link-item"><span>#</span><span>社交媒体</span></div>
-  </a>
-  <a href="#" target="_blank">
-    <div class="link-item"><span>🧠</span><span>常用AI工具</span></div>
-  </a>
+  <div class="link-item" onclick="openModal(8)"><span>⇗</span><span>联系站长</span></div>
+  <div class="link-item"><span>▶</span><span>流媒体大全</span></div>
+  <div class="link-item"><span>#</span><span>社交媒体</span></div>
+  <div class="link-item"><span>🧠</span><span>常用AI工具</span></div>
 </div>
 
+<!-- 所有弹窗（每个都是2个链接，样式统一） -->
+<!-- 弹窗1 -->
+<div class="modal" id="m1"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">查询工具</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📍</span><div class="text"><h4>IP 归属地</h4><p>查询当前 IP 地理位置</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>🌍</span><div class="text"><h4>IP 质量检测</h4><p>检测是否为代理IP</p></div></a></div>
+</div></div>
+
+<!-- 弹窗2 -->
+<div class="modal" id="m2"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">软件下载</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>💻</span><div class="text"><h4>电脑客户端</h4><p>Windows专用安装包</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📱</span><div class="text"><h4>安卓客户端</h4><p>Android手机APP</p></div></a></div>
+</div></div>
+
+<!-- 弹窗3 -->
+<div class="modal" id="m3"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">测速工具</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📶</span><div class="text"><h4>延迟测速</h4><p>测试节点延迟与丢包</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>⚡</span><div class="text"><h4>网速测试</h4><p>上传下载速度检测</p></div></a></div>
+</div></div>
+
+<!-- 弹窗4 -->
+<div class="modal" id="m4"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">命令终端</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>🔧</span><div class="text"><h4>在线终端</h4><p>浏览器内运行命令</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📜</span><div class="text"><h4>常用命令</h4><p>网络调试指令合集</p></div></a></div>
+</div></div>
+
+<!-- 弹窗5 -->
+<div class="modal" id="m5"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">代理技术文档</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📘</span><div class="text"><h4>基础教程</h4><p>从零开始配置教程</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📚</span><div class="text"><h4>高级配置</h4><p>路由规则与分流</p></div></a></div>
+</div></div>
+
+<!-- 弹窗6 -->
+<div class="modal" id="m6"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">域名优选</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>🌐</span><div class="text"><h4>域名检测</h4><p>检测域名连通性</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>✅</span><div class="text"><h4>优选推荐</h4><p>稳定高速域名列表</p></div></a></div>
+</div></div>
+
+<!-- 弹窗7 -->
+<div class="modal" id="m7"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">6月3日免费网络</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>🎁</span><div class="text"><h4>免费节点</h4><p>每日更新免费线路</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📥</span><div class="text"><h4>一键导入</h4><p>订阅链接自动导入</p></div></a></div>
+</div></div>
+
+<!-- 弹窗8：联系站长 -->
+<div class="modal" id="m8"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">联系站长</div>
+  <div class="modal-item"><span>✈️</span><div class="text"><h4>飞机客服</h4><p>heiyu1995</p></div></div>
+  <div class="modal-item"><span>💬</span><div class="text"><h4>QV客服</h4><p>928533857</p></div></div>
+  <div class="modal-item"><span>🔗</span><div class="text"><h4>备用</h4><p>319070682</p></div></div>
+</div></div>
+
+<script>
+function openModal(n){closeAll();document.getElementById('m'+n).style.display='block';}
+function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.style.display='none');}
+</script>
 </body>
 </html>
