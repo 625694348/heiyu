@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS LINK 三月空间控制台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;color:#eee;list-style:none;text-decoration:none;}
+body{
+    background:#0c0c10;
+    background-image:url('');
+    position:relative;
+    display:flex;
+    min-height:100vh;
+}
+/* 全局网线背景简易模拟 */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:radial-gradient(#00cccc22 1px,transparent 1px);
+    background-size:40px 40px;
+    pointer-events:none;
+    z-index:-1;
+}
+
+/* 左侧工具边栏 */
+.left-aside{
+    width:240px;
+    padding:30px 15px;
+    border-right:1px solid #00cccc44;
+}
+.left-aside .tit{
+    font-size:26px;
+    color:#00cccc;
+    border-bottom:2px solid #00cccc;
+    padding-bottom:8px;
+    margin-bottom:30px;
+}
+.left-aside .menu-item{
+    padding:14px 12px;
+    margin-bottom:12px;
+    background:#191922;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:0.2s;
+}
+.left-aside .menu-item:hover{background:#252535;}
+.left-aside .menu-item.active{background:#ffcc0022;border:1px solid #ffcc00;}
+
+/* 中间主体区域 */
+.main-wrap{
+    flex:1;
+    padding:30px;
+}
+/* 顶部标题+登录注册 */
+.main-top{
+    text-align:center;
+    position:relative;
+    margin-bottom:40px;
+}
+.main-top .login-box{
+    position:absolute;
+    top:0;
+    right:20px;
+    display:flex;
+    gap:8px;
+}
+.main-top button{
+    padding:9px 22px;
+    border:none;
+    border-radius:6px;
+    font-size:15px;
+}
+.btn-login{background:#0099cc;}
+.btn-reg{background:#00ccff;}
+.main-top h1{
+    font-size:60px;
+    color:#f1f1f1;
+    letter-spacing:4px;
+}
+.main-top .sub-tit{
+    font-size:22px;
+    color:#00cccc;
+    margin:8px 0 25px;
+}
+.play-bar{
+    width:320px;
+    margin:0 auto;
+    padding:12px 20px;
+    background:#2a1038;
+    border:1px solid #d84cff;
+    border-radius:99px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+}
+.play-bar span{color:#e99dff;font-size:16px;}
+
+/* 卡片网格布局 2行4列 */
+.card-container{
+    display:grid;
+    grid-template-columns: repeat(4,1fr);
+    gap:22px;
+}
+.card{
+    background:#181822;
+    padding:24px 18px;
+    border-radius:10px;
+    border:1px solid #333344;
+    position:relative;
+    min-height:220px;
+}
+.card.hot-yellow{border:1px solid #ffcc00;background:#221f12;box-shadow:0 0 12px #ffcc0033;}
+.card .tag{
+    position:absolute;
+    top:12px;
+    right:12px;
+    padding:3px 10px;
+    border-radius:4px;
+    font-size:13px;
+}
+.tag-new{background:#ffcc00;color:#111;}
+.tag-hot{background:#d62868;}
+.card .icon{font-size:36px;margin-bottom:12px;}
+.card h3{font-size:20px;margin-bottom:10px;}
+.card p{font-size:13px;color:#aaa;line-height:1.6;}
+
+/* 右侧链接边栏 */
+.right-aside{
+    width:260px;
+    padding:30px 15px;
+    border-left:1px solid #00cccc44;
+}
+.right-aside .tit{
+    font-size:26px;
+    color:#00cccc;
+    border-bottom:2px solid #00cccc;
+    padding-bottom:8px;
+    margin-bottom:30px;
+}
+.right-aside .link-item{
+    padding:16px 12px;
+    margin-bottom:14px;
+    background:#191922;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+</style>
+</head>
+<body>
+<!--左侧TOOLS栏目-->
+<div class="left-aside">
+    <div class="tit">TOOLS</div>
+    <div class="menu-item">
+        <span>🌐</span><span>查询工具</span>
+    </div>
+    <div class="menu-item">
+        <span>⬇</span><span>软件下载</span>
+    </div>
+    <div class="menu-item">
+        <span>⏱</span><span>测速工具</span>
+    </div>
+    <div class="menu-item">
+        <span>>_</span><span>命令终端</span>
+    </div>
+    <div class="menu-item">
+        <span>📄</span><span>代理技术文档</span>
+    </div>
+    <div class="menu-item">
+        <span>🌐</span><span>域名优选</span>
+    </div>
+    <div class="menu-item active">
+        <span>⚡</span><span>6月3日免费网络</span>
+    </div>
+</div>
+
+<!--中间主内容区-->
+<div class="main-wrap">
+    <div class="main-top">
+        <div class="login-box">
+            <button class="btn-login">↩ 登录</button>
+            <button class="btn-reg">👤 注册</button>
+        </div>
+        <h1>NEXUS LINK</h1>
+        <div class="sub-tit">三月空间控制台</div>
+        <div class="play-bar">
+            <span>.... 褪黑素·梓渝</span>
+            <span>◀ ▶ ▶</span>
+        </div>
+    </div>
+
+    <!--功能卡片区域-->
+    <div class="card-container">
+        <!--第一行卡片-->
+        <div class="card hot-yellow">
+            <div class="tag tag-new">NEW</div>
+            <div class="icon">▶</div>
+            <h3>视频搭建教程</h3>
+            <p>精华课程，国内独家内容，从0到1配置网络、手机号、独立站，完美运营海外电商</p>
+        </div>
+        <div class="card">
+            <div class="icon">🛒</div>
+            <h3>账号购买</h3>
+            <p>苹果带📝谷歌号|TK白号|ChatGPT等</p>
+        </div>
+        <div class="card">
+            <div class="icon">✈</div>
+            <h3>专线机场</h3>
+            <p>稳定高速|科学必备|AI专用</p>
+        </div>
+        <div class="card">
+            <div class="icon">🏠</div>
+            <h3>静态住宅IP</h3>
+            <p>原生住宅代理|短视频必备</p>
+        </div>
+        <!--第二行卡片-->
+        <div class="card">
+            <div class="icon">🗄️</div>
+            <h3>软路由现货</h3>
+            <p>全屋网络|工作室首选|24H发货</p>
+        </div>
+        <div class="card">
+            <div class="icon">☁</div>
+            <h3>VPS服务器</h3>
+            <p>自建节点|纯净住宅VPS</p>
+        </div>
+        <div class="card">
+            <div class="icon">☎</div>
+            <h3>手机号 & 防关联</h3>
+            <p>海外号码接码|多账号防关联</p>
+        </div>
+        <div class="card">
+            <div class="tag tag-hot">HOT</div>
+            <div class="icon">⚙️</div>
+            <h3>NBN视频创作母体</h3>
+            <p>AI全自动化流水线|视频切片、二创</p>
+        </div>
+    </div>
+</div>
+
+<!--右侧LINKS栏目-->
+<div class="right-aside">
+    <div class="tit">LINKS</div>
+    <div class="link-item">
+        <span>⇗</span><span>联系站长</span>
+    </div>
+    <div class="link-item">
+        <span>▶</span><span>流媒体大全</span>
+    </div>
+    <div class="link-item">
+        <span>#</span><span>社交媒体</span>
+    </div>
+    <div class="link-item">
+        <span>🧠</span><span>常用AI工具</span>
+    </div>
+</div>
+</body>
+</html>
