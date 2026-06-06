@@ -1,23 +1,279 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>命令终端</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS LINK - 黑彧科技控制台</title>
 <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family: "Microsoft YaHei",sans-serif;}
-    body{
-        background:#0c0c10;
-        color:#00ffcc;
-        padding:40px;
-        font-size:18px;
-        line-height:2.2;
-    }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui, -apple-system, "Microsoft YaHei", sans-serif;color:#eee;text-decoration:none;list-style:none;}
+    body{background:#0c0c10;min-height:100vh;display:flex;flex-direction:row;background-image: radial-gradient(#00cccc20 1px,transparent 1px);background-size:40px 40px;}
+
+    /* 左侧工具栏 */
+    .sidebar-left{width:240px;background:#11121a;border-right:1px solid #00cccc33;padding:30px 16px;}
+    .sidebar-left h2{color:#00cccc;font-size:24px;margin-bottom:24px;border-bottom:2px solid #00cccc;padding-bottom:8px;}
+    .menu{display:flex;align-items:center;gap:10px;padding:14px 12px;background:#1a1b26;border-radius:8px;margin-bottom:10px;transition:0.2s;cursor:pointer;}
+    .menu:hover{background:#27293d;box-shadow:0 0 8px #00cccc30;}
+    .menu.active{background:#ffcc0022;border:1px solid #ffcc00;}
+
+    /* 中间主内容 */
+    .main{flex:1;padding:40px 30px;}
+    .header{text-align:center;position:relative;margin-bottom:40px;}
+    .header h1{font-size:54px;color:#fff;letter-spacing:2px;}
+    .header .sub{font-size:22px;color:#00cccc;margin:8px 0 24px;}
+    .player{max-width:340px;margin:0 auto;padding:12px 20px;background:#2a1038;border:1px solid #d84cff;border-radius:999px;text-align:center;color:#e99dff;}
+
+    /* 卡片网格 */
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+    .card{background:#181822;border:1px solid #333344;border-radius:10px;padding:24px;position:relative;min-height:210px;transition:all 0.3s ease;cursor:pointer;}
+    .card:hover{border-color:#00cccc80;box-shadow:0 0 18px #00cccc35;transform:translateY(-4px);}
+    .card.hot{border-color:#ffcc00;background:#221f12;box-shadow:0 0 14px #ffcc0022;}
+    .tag{position:absolute;top:12px;right:12px;padding:3px 8px;border-radius:4px;font-size:12px;}
+    .tag.new{background:#ffcc00;color:#111;}
+    .tag.hot{background:#d62868;}
+    .card .icon{font-size:34px;margin-bottom:12px;}
+    .card h3{margin-bottom:10px;font-size:18px;}
+    .card p{color:#aaa;font-size:13px;line-height:1.5;}
+    a.card-wrap{display:block;color:inherit;text-decoration:none;}
+
+    /* 右侧链接栏 */
+    .sidebar-right{width:260px;background:#11121a;border-left:1px solid #00cccc33;padding:30px 16px;}
+    .sidebar-right h2{color:#00cccc;font-size:24px;margin-bottom:24px;border-bottom:2px solid #00cccc;padding-bottom:8px;}
+    .link-item{display:flex;align-items:center;gap:10px;padding:16px 12px;background:#1a1b26;border-radius:8px;margin-bottom:12px;transition:0.25s;cursor:pointer;}
+    .link-item:hover{background:#27293d;box-shadow:0 0 8px #00cccc30;}
+
+/* 弹窗通用 */
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;}
+.modal-box{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;background:#11121a;border:2px solid #00cccc;border-radius:12px;padding:30px 24px;}
+/* 关闭按钮统一样式 */
+.modal-close{position:absolute;top:16px;right:20px;font-size:24px;color:#ccc;cursor:pointer;transition:0.2s;}
+.modal-close:hover{color:#ff4444;transform:scale(1.1);}
+.modal-title{font-size:26px;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+
+/* 静态IP 缩小一倍 3行2列 */
+.ip-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,auto);gap:12px;}
+.ip-item{border-radius:8px;padding:12px 14px;}
+.ip-item a{display:flex;align-items:flex-start;gap:10px;width:100%;}
+.ip-item span{font-size:22px;margin-top:2px;}
+.ip-item .text h4{font-size:15px;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.ip-item .text p{font-size:12px;color:#ccc;line-height:1.4;}
+.tag-box{display:inline-block;padding:2px 5px;border-radius:3px;font-size:10px;}
+/* 边框配色不变 */
+.item1{border:2px solid #e6bc00;background:#1e1a0c;}
+.item1 h4{color:#ffdd33;}
+.item1 .tag-box{background:#ffcc22;color:#111;}
+.item2{border:2px solid #4488cc;background:#0f1826;}
+.item2 h4{color:#99ccff;}
+.item2 .tag-box{background:#3377bb;color:#fff;}
+.item3{border:2px solid #dd5522;background:#26150c;}
+.item3 h4{color:#ff8844;}
+.item3 .tag-box{background:#dd5522;color:#fff;}
+.item4{border:2px solid #22aaaa;background:#0c2222;}
+.item4 h4{color:#44dddd;}
+.item4 .tag-box{background:#22aaaa;color:#000;}
+.item5{border:2px solid #22bb55;background:#0c2215;}
+.item5 h4{color:#55ee77;}
+.item5 .tag-box{background:#22bb55;color:#000;}
+.item6{border:2px solid #2288dd;background:#0c1a26;}
+.item6 h4{color:#55bbff;}
+.item6 .tag-box{background:#2288dd;color:#000;}
+
+/* 其余弹窗4格样式不变 */
+.air-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:10px;}
+/* 统一卡片布局：图标居左、文字居右，全部统一排版 */
+.air-item{background:#1a1b26;padding:24px;border-radius:10px;display:flex;align-items:center;gap:16px;cursor:pointer;}
+.air-item:hover{background:#27293d;box-shadow:0 0 8px #00cccc30;}
+.air-item span{font-size:36px;flex-shrink:0;}
+.air-item .text h4{font-size:20px;color:#fff;margin-bottom:6px;}
+.air-item .text p{font-size:14px;color:#aaa;line-height:1.4;white-space:pre-line;}
+
+.modal-item{background:#1a1b26;padding:18px 20px;border-radius:10px;margin-bottom:12px;display:flex;align-items:center;gap:15px;}
+.modal-item a{display:flex;align-items:center;gap:15px;width:100%;}
+.modal-item:hover{background:#27293d;box-shadow:0 0 8px #00cccc30;}
+.modal-item span{font-size:24px;}
+.modal-item .text h4{font-size:17px;color:#fff;margin-bottom:4px;}
+.modal-item .text p{font-size:13px;color:#aaa;}
+
+/* 教程文本样式 */
+.tip-text{
+  background:#1a1b26;
+  padding:16px 20px;
+  border-radius:10px;
+  margin-top:12px;
+  line-height:1.8;
+  font-size:14px;
+  color:#eee;
+  white-space:pre-line;
+}
 </style>
 </head>
 <body>
-我是一个粉刷匠，粉刷本领强<br>
-我哈白U盾hiUSA<br>
-adbajbdjaskd<br>
-啊大家三大报表发放
+
+<!-- 左侧菜单 -->
+<div class="sidebar-left">
+  <h2>TOOLS</h2>
+  <div class="menu" onclick="openModal(1)">🌐 查询工具</div>
+  <div class="menu" onclick="openModal(2)">⬇ 软件下载</div>
+  <div class="menu" onclick="openModal(3)">⏱ 测速工具</div>
+  <div class="menu" onclick="openModal(4)">＞_ 命令终端</div>
+  <div class="menu" onclick="openModal(5)">📄 代理技术文档</div>
+  <div class="menu" onclick="openModal(6)">🌐 域名优选</div>
+  <div class="menu active" onclick="openModal(7)">⚡ 免费网络</div>
+</div>
+
+<!--中间卡片：VPS、静态IP已互换位置，静态IP图标🎧-->
+<div class="main">
+  <div class="header">
+    <h1>NEXUS LINK</h1>
+    <div class="sub">黑彧科技控制台</div>
+    <div class="player">正在播放：褪黑素·梓渝</div>
+  </div>
+
+  <div class="cards">
+    <!--1账号购买-->
+    <div class="card" onclick="openModal(11)"><div class="icon">🛒</div><h3>账号购买</h3><p>黑彧TG商城|各类海外软件账号</p></div>
+    <!--2视频搭建教程-->
+    <div class="card hot" onclick="openModal(18)"><div class="tag new">NEW</div><div class="icon">▶</div><h3>视频搭建教程</h3><p>精华课程，国内独家内容，从0到1配置网络、手机号、独立站，完美运营海外电商</p></div>
+    <!--3 VPS服务器-->
+    <div class="card" onclick="openModal(15)"><div class="icon">☁</div><h3>VPS服务器</h3><p>自建节点|纯净住宅VPS</p></div>
+    <!--4静态住宅IP 耳机图标-->
+    <div class="card" onclick="openModal(13)"><div class="icon">🎧</div><h3>静态住宅IP</h3><p>原生住宅代理|短视频必备</p></div>
+    <!--5专线机场-->
+    <div class="card" onclick="openModal(12)"><div class="icon">✈</div><h3>专线机场</h3><p>稳定高速|科学必备|AI专用</p></div>
+    <!--6软路由-->
+    <div class="card" onclick="openModal(14)"><div class="icon">🗄️</div><h3>软路由现货</h3><p>全屋网络|工作室首选|24H发货</p></div>
+    <!--7手机号-->
+    <div class="card" onclick="openModal(16)"><div class="icon">☎</div><h3>手机号 & 防关联</h3><p>海外号码接码|多账号防关联</p></div>
+    <!--8 NBN-->
+    <div class="card" onclick="openModal(17)"><div class="tag hot">HOT</div><div class="icon">⚙️</div><h3>NBN视频创作母体</h3><p>AI全自动化流水线|视频切片、二创</p></div>
+  </div>
+</div>
+
+<!--右侧-->
+<div class="sidebar-right">
+  <h2>LINKS</h2>
+  <div class="link-item" onclick="openModal(8)"><span>⇗</span><span>联系站长</span></div>
+  <div class="link-item"><span>▶</span><span>流媒体大全</span></div>
+  <div class="link-item"><span>#</span><span>社交媒体</span></div>
+  <div class="link-item"><span>🧠</span><span>常用AI工具</span></div>
+</div>
+
+<!-- 所有弹窗 统一关闭按钮 -->
+<div class="modal" id="m1"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">查询工具</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📍</span><div class="text"><h4>IP 归属地</h4><p>查询当前 IP 地理位置</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>🌍</span><div class="text"><h4>IP 质量检测</h4><p>检测是否为代理IP</p></div></a></div>
+</div></div>
+
+<div class="modal" id="m2"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">软件下载</div>
+  <div class="modal-item"><a href="https://www.hostbuf.com/" target="_blank"><span>💻</span><div class="text"><h4>Finalshell SSH工具</h4><p>SSH连接与服务器连接</p></div></a></div>
+  <div class="modal-item"><a href="https://karing.app" target="_blank"><span>🔗</span><div class="text"><h4>代理软件下载</h4><p>karing-安卓，iOS，Windows</p></div></a></div>
+  <div class="modal-item"><a href="https://pan.xunlei.com/s/VOuNMW9IRkl21JldrNxM0bqFA1?pwd=7qxt#" target="_blank"><span>📱</span><div class="text"><h4>安卓app下载</h4><p>TG,TK,X,INS等</p></div></a></div>
+</div></div>
+
+<div class="modal" id="m3"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">测速工具</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📶</span><div class="text"><h4>延迟测速</h4><p>测试节点延迟与丢包</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>⚡</span><div class="text"><h4>网速测试</h4><p>上传下载速度检测</p></div></a></div>
+</div></div>
+
+<div class="modal" id="m4"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">命令终端</div>
+  <!-- 第一个卡片 跳转 mlzd1.html -->
+  <div class="modal-item"><a href="/docs/mlzd1.html" target="_blank"><span>🔧</span><div class="text"><h4>在线终端</h4><p>浏览器内运行命令</p></div></a></div>
+  <!-- 第二个卡片 跳转 mlzd2.html -->
+  <div class="modal-item"><a href="/docs/mlzd2.html" target="_blank"><span>📜</span><div class="text"><h4>常用命令</h4><p>网络调试指令合集</p></div></a></div>
+</div></div>
+
+<div class="modal" id="m5"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">代理技术文档</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📘</span><div class="text"><h4>基础教程</h4><p>从零开始配置教程</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>📚</span><div class="text"><h4>高级配置</h4><p>路由规则与分流</p></div></a></div>
+</div></div>
+
+<div class="modal" id="m6"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">域名优选</div>
+  <div class="modal-item"><a href="#" target="_blank"><span>🌐</span><div class="text"><h4>域名检测</h4><p>检测域名连通性</p></div></a></div>
+  <div class="modal-item"><a href="#" target="_blank"><span>✅</span><div class="text"><h4>优选推荐</h4><p>稳定高速域名列表</p></div></a></div>
+</div></div>
+
+<div class="modal" id="m7"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">⚡ 免费网络</div>
+<div class="air-grid">
+  <div class="air-item"><span>📱</span><div class="text"><h4>安卓系统</h4><p>1：下载迅雷
+2：打开搜索：黑彧wj251995
+3：每个文件夹都有加速，长期更新</p></div></div>
+  <div class="air-item"><span>🍎</span><div class="text"><h4>iOS系统</h4><p>需要海外ID下载
+1：火种vpn
+2：1.1.1.1
+3：singlinkvpn</p></div></div>
+</div></div></div>
+
+<div class="modal" id="m8"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">联系站长</div>
+  <div class="modal-item"><span>✈️</span><div class="text"><h4>飞机客服</h4><p>heiyu1995</p></div></div>
+  <div class="modal-item"><span>💬</span><div class="text"><h4>QV客服</h4><p>928533857</p></div></div>
+  <div class="modal-item"><span>🔗</span><div class="text"><h4>备用</h4><p>319070682</p></div></div>
+</div></div>
+
+<div class="modal" id="m11"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">🛒 账号购买</div>
+<div class="air-grid">
+  <div class="air-item"><a href="https://链接1.com" target="_blank"><span>🍎</span><div class="text"><h4>黑彧TG商城</h4><p>ipa接码登录，打开后看清楚产品介绍</p></div></a></div>
+  <div class="air-item" onclick="openModal(8)"><span>✈️</span><div class="text"><h4>+86飞机业务</h4><p>新号注册，老号找回，请联系客服</p></div></div>
+  <div class="air-item" onclick="openModal(8)"><span>📱</span><div class="text"><h4>其他国外软件账号</h4><p>联系客服咨询</p></div></div>
+</div></div></div>
+
+<div class="modal" id="m12"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">✈ 专线机场</div>
+<div class="air-grid">
+  <div class="air-item"><a href="https://link1.com" target="_blank"><span style="color:#d72cff;">✈</span><div class="text"><h4>专线机场 SSR</h4><p>海外AI必备</p></div></a></div>
+  < <div class="air-item"><a href="https://link2.com" target="_blank"><span style="color:#369cff;">✈</span><div class="text"><h4>TAG机场</h4><p>老牌大厂节点</p></div></a></div>
+  <div class="air-item"><a href="https://link3.com" target="_blank"><span style="color:#ff69bc;">☁</span><div class="text"><h4>糖果云备用</h4><p>稳定高速</p></div></a></div>
+  <div class="air-item"><a href="https://link4.com" target="_blank"><span style="color:#00cccc;">⚡</span><div class="text"><h4>高端企业专线</h4><p>工作室专用</p></div></a></div>
+</div></div></div>
+
+<div class="modal" id="m13"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title"><span style="color:#ff88ff;">🏠</span>静态住宅IP</div>
+<div class="ip-grid">
+  <div class="ip-item item1"><a href="https://www.xinquyun.com/aff/WNTYDILU" target="_blank"><span style="color:#ffdd33;">🔥</span><div class="text"><h4>米亚IP(新手短视频推荐)<span class="tag-box">扫码直连</span></h4><p>⚡无需中转，扫码即用</p></div></a></div>
+  <div class="ip-item item2"><a href="https://链接2.com" target="_blank"><span style="color:#99ccff;">👑</span><div class="text"><h4>IPRoyal <span class="tag-box">质量最高</span></h4><p>🏆目前用过质量最高的静态IP | <span class="tag-box">需中转</span></p></div></a></div>
+  <div class="ip-item item3"><a href="https://链接3.com" target="_blank"><span style="color:#ff8844;">🔥</span><div class="text"><h4>985 Proxy(便宜原生IP,矩阵号推荐)</h4><p>目前最便宜的IP | <span class="tag-box">需中转</span></p></div></a></div>
+  <div class="ip-item item4"><a href="https://链接4.com" target="_blank"><span style="color:#44dddd;">🌐</span><div class="text"><h4>IPFly 高质量原生IP</h4><p>高质量住宅IP | <span class="tag-box">需中转</span></p></div></a></div>
+  <div class="ip-item item5"><a href="https://链接5.com" target="_blank"><span style="color:#55ee77;">🚀</span><div class="text"><h4>ProxyLite <span class="tag-box">破万播放</span></h4><p>各国都有|美区新号首个视频破万播放|<span class="tag-box">需中转 建议VPS</span></p></div></a></div>
+  <div class="ip-item item6"><a href="https://链接6.com" target="_blank"><span style="color:#55bbff;">💲</span><div class="text"><h4>Webshare $1/月</h4><p>💲超低价静态IP | 不支持国内支付，可找站长代付 | <span class="tag-box">需中转</span></p></div></a></div>
+</div></div></div>
+
+<div class="modal" id="m14"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">🗄️ 软路由现货</div>
+<div class="air-grid">
+  <div class="air-item"><a href="https://链接1.com" target="_blank"><span>mini</span><div class="text"><h4>迷你软路由</h4><p>家用小型</p></div></a></div>
+  <div class="air-item"><a href="https://链接2.com" target="_blank"><span>⚡</span><div class="text"><h4>高性能软路由</h4><p>工作室专用</p></div></a></div>
+  <div class="air-item"><a href="https://链接3.com" target="_blank"><span>📦</span><div class="text"><h4>成品发货</h4><p>即插即用</p></div></a></div>
+  <div class="air-item"><a href="https://link4.com" target="_blank"><span>🛠️</span><div class="text"><h4>远程调试</h4><p>技术支持</p></div></a></div>
+</div></div></div>
+
+<div class="modal" id="m15"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">☁ VPS服务器</div>
+<div class="air-grid">
+  <div class="air-item"><a href="https://www.xinquyun.com/aff/WNTYDILU" target="_blank"><span>☁</span><div class="text"><h4>新区云vps服务器</h4><p>站长自用，本站首页视频教程</p></div></a></div>
+  <div class="air-item"><a href="https://lisahost.com/aff.php?aff=11415" target="_blank"><span>☁</span><div class="text"><h4>Lisa Host住宅vps</h4><p>tk热门/国家多/双isp</p></div></a></div>
+  <div class="air-item"><a href="https://链接3.com" target="_blank"><span>🏠</span><div class="text"><h4>住宅VPS</h4><p>纯净原生</p></div></a></div>
+  <div class="air-item"><a href="https://链接4.com" target="_blank"><span>⚙️</span><div class="text"><h4>自建节点VPS</h4><p>独立使用</p></div></a></div>
+</div></div></div>
+
+<div class="modal" id="m16"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">☎ 手机号 & 防关联</div>
+<div class="air-grid">
+  <div class="air-item"><a href="https://链接1.com" target="_blank"><span>🌍</span><div class="text"><h4>海外手机号</h4><p>接码注册</p></div></a></div>
+  <div class="air-item"><a href="https://链接2.com" target="_blank"><span>🔐</span><div class="text"><h4>账号防关联</h4><p>多账号隔离</p></div></a></div>
+  <div class="air-item"><a href="https://链接3.com" target="_blank"><span>📞</span><div class="text"><h4>永久手机号</h4><p>可长期使用</p></div></a></div>
+  <div class="air-item"><a href="https://链接4.com" target="_blank"><span>🛡️</span><div class="text"><h4>指纹隔离</h4><p>环境安全</p></div></a></div>
+</div></div></div>
+
+<div class="modal" id="m17"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">⚙️ NBN视频创作母体</div>
+<div class="air-grid">
+  <div class="air-item"><a href="https://链接1.com" target="_blank"><span>🤖</span><div class="text"><h4>AI自动剪辑</h4><p>全自动二创</p></div></a></div>
+  <div class="air-item"><a href="https://链接2.com" target="_blank"><span>📽️</span><div class="text"><h4>视频切片</h4><p>批量生成</p></div></a></div>
+  <div class="air-item"><a href="https://链接3.com" target="_blank"><span>🚀</span><div class="text"><h4>流水线发布</h4><p>多平台同步</p></div></a></div>
+  <div class="air-item"><a href="https://链接4.com" target="_blank"><span>📚</span><div class="text"><h4>教程 + 工具</h4><p>全套打包</p></div></a></div>
+</div></div></div>
+
+<div class="modal" id="m18"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">▶ 视频搭建教程</div>
+<div class="air-grid">
+  <div class="air-item"><a href="https://www.geto.run/3xui.html" target="_blank"><span>▶️</span><div class="text"><h4>视频教程</h4><p>SSH工具在下面</p></div></a></div>
+  <div class="air-item"><a href="https://www.hostbuf.com/" target="_blank"><span>💻</span><div class="text"><h4>SSH连接软件</h4><p>搭建节点专用工具</p></div></a></div>
+</div></div></div>
+
+<script>
+function openModal(n){closeAll();document.getElementById('m'+n).style.display='block';}
+function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.style.display='none');}
+</script>
 </body>
 </html>
