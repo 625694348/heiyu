@@ -541,26 +541,7 @@ function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.style.displ
 <script>
 function openModal(n){closeAll();document.getElementById('m'+n).style.display='block';}
 function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.style.display='none');}
-</script>
-(function() {
-  var _s = document.createElement('script');
-  _s.src="https://hytg.ccwu.cc/customerServer.js"
-  _s.onload = function(){
-    var option = {
-      "authInit":true,
-      openUrl: 'https://hytg.ccwu.cc',
-      token: '4109fbb2d7bc3d5559348278816a20bc',
-      kefuid:'',
-      isShowTip: true,
-      mobileIcon: '',
-      pcIcon: '',
-      windowStyle:'center'
-    };
-    var canCustomerServer = new initCustomerServer(option);
-    canCustomerServer.init();
-  }
-  document.head.appendChild(_s)
-})();
+
 </script>
 </body>
 </html>
