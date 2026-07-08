@@ -211,7 +211,7 @@
 <div class="modal" id="m11"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">🛒 账号购买</div>
 <div class="air-grid">
   <div class="air-item"><a href="https://链接1.com" target="_blank"><span>🍎</span><div class="text"><h4>黑彧TG商城</h4><p>ipa接码登录，打开后看清楚产品介绍</p></div></a></div>
-  <div class="air-item" onclick="openModal(8)"><span>✈</span><div class="text"><h4>+86飞机业务</h4><p>新号注册，老号找回，请联系客服</p></div></div>
+  <div class="air-item" onclick="openModal(8)"><span>✈️</span><div class="text"><h4>+86飞机业务</h4><p>新号注册，老号找回，请联系客服</p></div></div>
   <div class="air-item" onclick="openModal(8)"><span>📱</span><div class="text"><h4>其他国外软件账号</h4><p>联系客服咨询</p></div></div>
 </div></div></div>
 
@@ -245,7 +245,7 @@
 <div class="air-grid">
   <div class="air-item"><a href="https://www.xinquyun.com/aff/WNTYDILU" target="_blank"><span>☁</span><div class="text"><h4>新区云vps服务器</h4><p>站长自用，本站首页视频教程</p></div></a></div>
   <div class="air-item"><a href="https://lisahost.com/aff.php?aff=11415" target="_blank"><span>☁</span><div class="text"><h4>Lisa Host住宅vps</h4><p>tk热门/国家多/双isp</p></div></a></div>
-  <div class="air-item"><a href="https://链接3.com" target="_blank"><span>🏠</span><div class="text"><h4>住宅VPS</h4><p>纯净原生</p></div></a></div>
+  < <div class="air-item"><a href="https://链接3.com" target="_blank"><span>🏠</span><div class="text"><h4>住宅VPS</h4><p>纯净原生</p></div></a></div>
   <div class="air-item"><a href="https://链接4.com" target="_blank"><span>⚙️</span><div class="text"><h4>自建节点VPS</h4><p>独立使用</p></div></a></div>
 </div></div></div>
 
@@ -257,12 +257,12 @@
   <div class="air-item"><a href="https://链接4.com" target="_blank"><span>🛡️</span><div class="text"><h4>指纹隔离</h4><p>环境安全</p></div></a></div>
 </div></div></div>
 
-<div class="modal" id="m17"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">⚙ NBN视频创作母体</div>
+<div class="modal" id="m17"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">⚙️ NBN视频创作母体</div>
 <div class="air-grid">
   <div class="air-item"><a href="https://链接1.com" target="_blank"><span>🤖</span><div class="text"><h4>AI自动剪辑</h4><p>全自动二创</p></div></a></div>
-  <div class="air-item"><a href="https://link2.com" target="_blank"><span>📽️</span><div class="text"><h4>视频切片</h4><p>批量生成</p></div></a></div>
-  <div class="air-item"><a href="https://link3.com" target="_blank"><span>🚀</span><div class="text"><h4>流水线发布</h4><p>多平台同步</p></div></a></div>
-  <div class="air-item"><a href="https://link4.com" target="_blank"><span>📚</span><div class="text"><h4>教程 + 工具</h4><p>全套打包</p></div></a></div>
+  <div class="air-item"><a href="https://链接2.com" target="_blank"><span>📽️</span><div class="text"><h4>视频切片</h4><p>批量生成</p></div></a></div>
+  <div class="air-item"><a href="https://链接3.com" target="_blank"><span>🚀</span><div class="text"><h4>流水线发布</h4><p>多平台同步</p></div></a></div>
+  <div class="air-item"><a href="https://链接4.com" target="_blank"><span>📚</span><div class="text"><h4>教程 + 工具</h4><p>全套打包</p></div></a></div>
 </div></div></div>
 
 <div class="modal" id="m18"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">▶ 视频搭建教程</div>
@@ -275,19 +275,14 @@
 function openModal(n){closeAll();document.getElementById('m'+n).style.display='block';}
 function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.style.display='none');}
 </script>
-
-<!-- 修复域名后的客服JS，src和openUrl统一为hy-tg.ccwu.cc -->
-<script>
+  <script>
 (function() {
   var _s = document.createElement('script');
-  // 修正1：脚本域名和你的网站域名一致 hy-tg.ccwu.cc
-  _s.src="https://hy-tg.ccwu.cc/customerServer.js"
-  _s.async = true;
+  _s.src="https://hytg.ccwu.cc/customerServer.js"
   _s.onload = function(){
     var option = {
       "authInit":true,
-      // 修正2：后台对接域名同步修改
-      openUrl: 'https://hy-tg.ccwu.cc',
+      openUrl: 'https://hytg.ccwu.cc',
       token: '4109fbb2d7bc3d5559348278816a20bc',
       kefuid:'',
       isShowTip: true,
@@ -301,6 +296,5 @@ function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.style.displ
   document.head.appendChild(_s)
 })();
 </script>
-
 </body>
 </html>
