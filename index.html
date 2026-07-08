@@ -91,7 +91,7 @@
 .modal-item:hover{background:#27293d;box-shadow:0 0 8px #00cccc30;}
 .modal-item span{font-size:24px;}
 .modal-item .text h4{font-size:17px;color:#fff;margin-bottom:4px;}
-.modal-item .text p{font-size:13px;color:#aaa;}
+.modal-item .text p{color:#aaa;font-size:13px;line-height:1.5;}
 
 /* 教程文本样式 */
 .tip-text{
@@ -245,7 +245,7 @@
 <div class="air-grid">
   <div class="air-item"><a href="https://www.xinquyun.com/aff/WNTYDILU" target="_blank"><span>☁</span><div class="text"><h4>新区云vps服务器</h4><p>站长自用，本站首页视频教程</p></div></a></div>
   <div class="air-item"><a href="https://lisahost.com/aff.php?aff=11415" target="_blank"><span>☁</span><div class="text"><h4>Lisa Host住宅vps</h4><p>tk热门/国家多/双isp</p></div></a></div>
-  < <div class="air-item"><a href="https://链接3.com" target="_blank"><span>🏠</span><div class="text"><h4>住宅VPS</h4><p>纯净原生</p></div></a></div>
+  <div class="air-item"><a href="https://链接3.com" target="_blank"><span>🏠</span><div class="text"><h4>住宅VPS</h4><p>纯净原生</p></div></a></div>
   <div class="air-item"><a href="https://链接4.com" target="_blank"><span>⚙️</span><div class="text"><h4>自建节点VPS</h4><p>独立使用</p></div></a></div>
 </div></div></div>
 
@@ -275,26 +275,28 @@
 function openModal(n){closeAll();document.getElementById('m'+n).style.display='block';}
 function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.style.display='none');}
 </script>
-  <script>
+
+<!-- 已正确加入客服系统 -->
+<script>
 (function() {
   var _s = document.createElement('script');
-  _s.src="https://hytg.ccwu.cc/customerServer.js"
-  _s.onload = function(){
+  _s.src = "https://hytg.ccwu.cc/customerServer.js";
+  _s.onload = function() {
     var option = {
-      "authInit":true,
+      authInit: true,
       openUrl: 'https://hytg.ccwu.cc',
       token: '4109fbb2d7bc3d5559348278816a20bc',
-      kefuid:'',
+      kefuid: '',
       isShowTip: true,
       mobileIcon: '',
       pcIcon: '',
-      windowStyle:'center'
+      windowStyle: 'center'
     };
-    var canCustomerServer = new initCustomerServer(option);
-    canCustomerServer.init();
-  }
-  document.head.appendChild(_s)
+    new initCustomerServer(option).init();
+  };
+  document.head.appendChild(_s);
 })();
 </script>
+
 </body>
 </html>
