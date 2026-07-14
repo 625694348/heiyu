@@ -276,44 +276,18 @@ function openModal(n){closeAll();document.getElementById('m'+n).style.display='b
 function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.style.display='none');}
 </script>
 
-<!-- 已正确加入客服系统 -->
-<script>
-(function() {
-  var _s = document.createElement('script');
-  _s.src = "https://hytg.ccwu.cc/customerServer.js";
-  _s.onload = function(){
-    var option = {
-      authInit: true,
-      openUrl: 'https://hytg.ccwu.cc',
-      token: '4109fbb2d7bc3d5559348278816a20bc',
-      kefuid: '',
-      isShowTip: true,
-      mobileIcon: '',
-      pcIcon: '',
-      windowStyle: 'center'
-    };
-    var canCustomerServer = new initCustomerServer(option);
-    canCustomerServer.init();
-
-    // 监听离线事件，阻止留言页，强制聊天界面
-    window.$chat.on('customerOutLine', function(){
-      // 重置窗口尺寸为聊天窗口大小，覆盖离线留言尺寸
-      const iframeDom = document.getElementById('iframe_content');
-      if(window.innerWidth > 600){
-        iframeDom.style.width = '730px';
-      }else{
-        iframeDom.style.width = '100%';
-      }
-      iframeDom.style.display = 'block';
-      // 主动通知iframe保持对话模式
-      iframeDom.querySelector('.iframe_contanier').contentWindow.postMessage({
-        type: 'reload'
-      }, "*");
-    });
-  };
-  document.head.appendChild(_s);
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6a5249f1a6558f1d451feca7/1jt8on1pj';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-
+<!--End of Tawk.to Script-->
 </body>
 </html>
