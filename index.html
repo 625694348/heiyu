@@ -43,9 +43,9 @@
 
 /* 弹窗通用 */
 .modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;}
-.modal-box{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;background:#11121a;border:2px solid #00cccc;border-radius:12px;padding:30px 24px;}
+.modal-box{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;max-width:92vw;max-height:85vh;overflow-y:auto;background:#11121a;border:2px solid #00cccc;border-radius:12px;padding:30px 24px;}
 /* 关闭按钮统一样式 */
-.modal-close{position:absolute;top:16px;right:20px;font-size:24px;color:#ccc;cursor:pointer;transition:0.2s;}
+.modal-close{position:absolute;top:16px;right:20px;font-size:24px;color:#ccc;cursor:pointer;transition:0.2s;z-index:2;}
 .modal-close:hover{color:#ff4444;transform:scale(1.1);}
 .modal-title{font-size:26px;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
 
@@ -104,12 +104,41 @@
   color:#eee;
   white-space:pre-line;
 }
+
+/* ========== 移动端响应式新增 ========== */
+.hamburger{display:none;font-size:28px;padding:12px 16px;background:#11121a;color:#00cccc;cursor:pointer;position:sticky;top:0;z-index:100;}
+
+@media(max-width:1024px){
+    body{flex-direction:column;}
+    .hamburger{display:block;}
+    .sidebar-left{width:100%;border-right:none;border-bottom:1px solid #00cccc33;padding:16px;display:none;}
+    .sidebar-left.open{display:block;}
+    .sidebar-left h2{margin-bottom:12px;font-size:20px;}
+    .sidebar-right{width:100%;border-left:none;border-top:1px solid #00cccc33;padding:16px;margin-top:20px;}
+    .sidebar-right h2{margin-bottom:12px;font-size:20px;}
+    .main{padding:20px 16px;}
+    .header h1{font-size:28px;}
+    .header .sub{font-size:16px;}
+    .cards{grid-template-columns:repeat(2,1fr);gap:14px;}
+    .card{padding:16px;min-height:160px;}
+    .card .icon{font-size:28px;}
+    .air-grid{grid-template-columns:1fr;gap:14px;}
+    .ip-grid{grid-template-columns:1fr;}
+    .modal-title{font-size:20px;}
+    .air-item{padding:16px;}
+}
+
+@media(max-width:480px){
+    .cards{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
+<!-- 移动端汉堡按钮 -->
+<div class="hamburger" onclick="toggleSidebar()">☰ TOOLS菜单(点击展开)</div>
 
 <!-- 左侧菜单 -->
-<div class="sidebar-left">
+<div class="sidebar-left" id="leftMenu">
   <h2>TOOLS</h2>
   <div class="menu" onclick="openModal(1)">🌐 查询工具</div>
   <div class="menu" onclick="openModal(2)">⬇ 软件下载</div>
@@ -274,6 +303,11 @@
 <script>
 function openModal(n){closeAll();document.getElementById('m'+n).style.display='block';}
 function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.style.display='none');}
+//移动端汉堡菜单
+function toggleSidebar(){
+  const menu = document.getElementById('leftMenu');
+  menu.classList.toggle('open');
+}
 </script>
 
 <!--Start of Tawk.to Script-->
