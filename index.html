@@ -31,6 +31,42 @@
     .card h3{margin-bottom:10px;font-size:18px;}
     .card p{color:#aaa;font-size:13px;line-height:1.5;}
     a.card-wrap{display:block;color:inherit;text-decoration:none;}
+    /* 共享苹果ID图标 */
+    .apple-id-icon{
+      width:48px;
+      height:48px;
+      border-radius:12px;
+      background:linear-gradient(180deg,#22d3ff 0%,#0066ee 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:12px;
+      box-shadow:0 0 14px #00aaff44;
+    }
+    .apple-id-icon::before{
+      content:"";
+      width:26px;
+      height:32px;
+      background:
+        linear-gradient(#fff,#fff) left 6px top 0/4px 22px no-repeat,
+        linear-gradient(#fff,#fff) right 6px top 0/4px 22px no-repeat,
+        linear-gradient(#fff,#fff) 50% 14px/16px 4px no-repeat,
+        linear-gradient(#fff,#fff) 50% 24px/16px 4px no-repeat;
+      clip-path:polygon(
+        50% 0,
+        62% 12%,
+        82% 12%,
+        70% 24%,
+        82% 36%,
+        62% 36%,
+        50% 48%,
+        38% 36%,
+        18% 36%,
+        30% 24%,
+        18% 12%,
+        38% 12%
+      );
+    }
     /* 右侧链接栏 */
     .sidebar-right{width:260px;background:#11121a;border-left:1px solid #00cccc33;padding:30px 16px;}
     .sidebar-right h2{color:#00cccc;font-size:24px;margin-bottom:24px;border-bottom:2px solid #00cccc;padding-bottom:8px;}
@@ -111,6 +147,7 @@
     .cards{grid-template-columns:repeat(2,1fr);gap:14px;}
     .card{padding:16px;min-height:160px;}
     .card .icon{font-size:28px;}
+    .apple-id-icon{width:40px;height:40px;border-radius:10px;}
     .air-grid{grid-template-columns:1fr;gap:14px;}
     .ip-grid{grid-template-columns:1fr;}
     .modal-title{font-size:20px;}
@@ -135,7 +172,7 @@
   <div class="menu" onclick="openModal(6)">🌐 域名优选</div>
   <div class="menu active" onclick="openModal(7)">⚡ 免费网络</div>
 </div>
-<!--中间卡片：VPS、静态住宅IP已互换位置，静态住宅IP图标🎧-->
+<!--中间卡片：8个卡片顺序已调整，原第8个移动到第2位，其余依次后移-->
 <div class="main">
   <div class="header">
     <h1>telegram、tiktok、X、油管</h1>
@@ -147,20 +184,26 @@
   <div class="cards">
     <!--1账号购买 直接跳转tg.hy88.de-->
     <div class="card" onclick="window.open('https://hy88.de','_blank')"><div class="icon">🛒</div><h3>账号购买</h3><p>黑彧TG商城|各类海外软件账号</p></div>
-    <!--2视频搭建教程-->
+
+    <!--2 共享苹果ID，直接跳转 id.qianyuwing.com，图标改为蓝白 App Store 风格 -->
+    <div class="card" onclick="window.open('https://id.qianyuwing.com','_blank')">
+      <div class="apple-id-icon" aria-label="App Store"></div>
+      <h3>共享苹果ID</h3>
+      <p>免费提供各类国家苹果共享ID，使用前请看清注意事项</p>
+    </div>
+
+    <!--3 原位置2：视频搭建教程-->
     <div class="card hot" onclick="openModal(18)"><div class="tag new">NEW</div><div class="icon">▶</div><h3>视频搭建教程</h3><p>精华课程，国内独家内容，从0到1配置网络、手机号、独立站，完美运营海外电商</p></div>
-    <!--3 VPS服务器-->
+    <!--4 原位置3：VPS服务器-->
     <div class="card" onclick="openModal(15)"><div class="icon">☁</div><h3>VPS服务器</h3><p>自建节点|纯净住宅VPS</p></div>
-    <!--4静态住宅IP 耳机图标-->
+    <!--5 原位置4：静态住宅IP 耳机图标-->
     <div class="card" onclick="openModal(13)"><div class="icon">🎧</div><h3>静态住宅IP</h3><p>原生住宅代理|短视频必备</p></div>
-    <!--5专线机场-->
+    <!--6 原位置5：专线机场-->
     <div class="card" onclick="openModal(12)"><div class="icon">✈</div><h3>专线机场</h3><p>稳定高速|科学必备|AI专用</p></div>
-    <!--6软路由-->
+    <!--7 原位置6：软路由现货-->
     <div class="card" onclick="openModal(14)"><div class="icon">🗄️</div><h3>软路由现货</h3><p>全屋网络|工作室首选|24H发货</p></div>
-    <!--7手机号-->
+    <!--8 原位置7：手机号 & 防关联-->
     <div class="card" onclick="openModal(16)"><div class="icon">☎</div><h3>手机号 & 防关联</h3><p>海外号码接码|多账号防关联</p></div>
-    <!--8 NBN-->
-    <div class="card" onclick="openModal(17)"><div class="tag hot">HOT</div><div class="icon">⚙️</div><h3>NBN视频创作母体</h3><p>AI全自动化流水线|视频切片、二创</p></div>
   </div>
 </div>
 <!--右侧-->
@@ -204,10 +247,11 @@
   <div class="air-item"><span>📱</span><div class="text"><h4>安卓系统</h4><p>1：下载迅雷
 2：打开搜索：黑彧wj251995
 3：每个文件夹都有加速，长期更新</p></div></div>
-  <div class="air-item"><span>🍎</span><div class="text"><h4>iOS系统</h4><p>需要海外ID下载
+  <div class="air-item"><span>🍎</span><div class="text"><h4>iOS系统</h4><p>需要海外ID下载，本站又免费ID链接
 1：火种vpn
 2：1.1.1.1
-3：singlinkvpn</p></div></div>
+3：快喵
+4：nthlink</p></div></div>
 </div></div></div>
 <div class="modal" id="m8"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">联系站长</div>
   <div class="modal-item"><span>✈️</span><div class="text"><h4>飞机客服</h4><p>heiyukefubot</p></div></div>
@@ -260,7 +304,7 @@
 </div></div></div>
 <div class="modal" id="m18"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">▶ 视频搭建教程</div>
 <div class="air-grid">
-  <div class="air-item"><a href="https://www.geto.run/3xui.html" target="_blank"><span>▶️</span><div class="text"><h4>视频教程</h4><p>SSH工具在下面</p></div></a></div>
+  <div class="air-item"><a href="https://www.geto.run" target="_blank"><span>▶️</span><div class="text"><h4>视频教程</h4><p>SSH工具，节点工具，搭建教程可以B站搜索</p></div></a></div>
   <div class="air-item"><a href="https://www.hostbuf.com/" target="_blank"><span>💻</span><div class="text"><h4>SSH连接软件</h4><p>搭建节点专用工具</p></div></a></div>
 </div></div></div>
 <script>
