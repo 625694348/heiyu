@@ -12,7 +12,7 @@
     .sidebar-left h2{color:#00cccc;font-size:24px;margin-bottom:24px;border-bottom:2px solid #00cccc;padding-bottom:8px;}
     .menu{display:flex;align-items:center;gap:10px;padding:14px 12px;background:#1a1b26;border-radius:8px;margin-bottom:10px;transition:0.2s;cursor:pointer;}
     .menu:hover{background:#27293d;box-shadow:0 0 8px #00cccc30;}
-    .menu.active{background:#ffcc0022;border:1px solid #ffcc00;}
+.menu.active{background:#1a1b26;border:none;}
     /* 中间主内容 */
     .main{flex:1;padding:40px 30px;}
     .header{text-align:center;position:relative;margin-bottom:40px;}
@@ -184,16 +184,14 @@
   <div class="cards">
     <!--1账号购买 直接跳转tg.hy88.de-->
     <div class="card" onclick="window.open('https://hy88.de','_blank')"><div class="icon">🛒</div><h3>账号购买</h3><p>黑彧TG商城|各类海外软件账号</p></div>
-
     <!--2 共享苹果ID，直接跳转 id.qianyuwing.com，图标改为蓝白 App Store 风格 -->
     <div class="card" onclick="window.open('https://id.qianyuwing.com','_blank')">
       <div class="apple-id-icon" aria-label="App Store"></div>
       <h3>共享苹果ID</h3>
       <p>免费提供各类国家苹果共享ID，使用前请看清注意事项</p>
     </div>
-
-    <!--3 原位置2：视频搭建教程-->
-    <div class="card hot" onclick="openModal(18)"><div class="tag new">NEW</div><div class="icon">▶</div><h3>视频搭建教程</h3><p>精华课程，国内独家内容，从0到1配置网络、手机号、独立站，完美运营海外电商</p></div>
+    <!--3 原位置2：视频搭建教程 已移除hot类，黄色边框消失-->
+    <div class="card" onclick="openModal(18)"><div class="tag new">NEW</div><div class="icon">▶</div><h3>视频搭建教程</h3><p>精华课程，国内独家内容，从0到1配置网络、手机号、独立站，完美运营海外电商</p></div>
     <!--4 原位置3：VPS服务器-->
     <div class="card" onclick="openModal(15)"><div class="icon">☁</div><h3>VPS服务器</h3><p>自建节点|纯净住宅VPS</p></div>
     <!--5 原位置4：静态住宅IP 耳机图标-->
@@ -298,7 +296,7 @@
 <div class="modal" id="m17"><div class="modal-box"><div class="modal-close" onclick="closeAll()">×</div><div class="modal-title">⚙️ NBN视频创作母体</div>
 <div class="air-grid">
   <div class="air-item"><a href="https://链接1.com" target="_blank"><span>🤖</span><div class="text"><h4>AI自动剪辑</h4><p>全自动二创</p></div></a></div>
-  <div class="air-item"><a href="https://链接2.com" target="_blank"><span>📽️</span><div class="text"><h4>视频切片</h4><p>批量生成</p></div></a></div>
+  <div class="air-item"><a href="https://link2.com" target="_blank"><span>📽️</span><div class="text"><h4>视频切片</h4><p>批量生成</p></div></a></div>
   <div class="air-item"><a href="https://链接3.com" target="_blank"><span>🚀</span><div class="text"><h4>流水线发布</h4><p>多平台同步</p></div></a></div>
   <div class="air-item"><a href="https://链接4.com" target="_blank"><span>📚</span><div class="text"><h4>教程 + 工具</h4><p>全套打包</p></div></a></div>
 </div></div></div>
