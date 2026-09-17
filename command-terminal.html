@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>命令终端 · 搭建脚本</title>
+<style>
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-card: #111827;
+    --bg-code: #0d1117;
+    --border-color: #1f2937;
+    --accent-cyan: #22d3ee;
+    --accent-purple: #a855f7;
+    --accent-green: #22c55e;
+    --accent-orange: #f59e0b;
+    --accent-pink: #ec4899;
+    --accent-blue: #3b82f6;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 40px 20px;
+    line-height: 1.6;
+  }
+
+  .terminal-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .terminal-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .terminal-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .terminal-title::before {
+    content: '▶';
+    color: var(--accent-cyan);
+    font-size: 1.2rem;
+    -webkit-text-fill-color: var(--accent-cyan);
+  }
+
+  .terminal-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-top: 8px;
+  }
+
+  .scripts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .script-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .script-card:hover {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.08);
+  }
+
+  .script-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .script-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .script-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .badge-tms { background: rgba(34, 211, 238, 0.15); color: var(--accent-cyan); }
+  .badge-sui { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
+  .badge-3xui { background: rgba(245, 158, 11, 0.15); color: var(--accent-orange); }
+  .badge-singbox { background: rgba(34, 197, 94, 0.15); color: var(--accent-green); }
+  .badge-aurora { background: rgba(236, 72, 153, 0.15); color: var(--accent-pink); }
+
+  .script-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .script-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .script-tag {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  .code-block-wrapper {
+    position: relative;
+    background: var(--bg-code);
+    padding: 14px 16px;
+  }
+
+  .code-block-wrapper.has-label {
+    padding-top: 36px;
+  }
+
+  .code-label {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    font-size: 0.75rem;
+    color: var(--accent-orange);
+    font-weight: 500;
+  }
+
+  .code-label.warning {
+    color: var(--accent-orange);
+  }
+
+  .code-text {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+    font-size: 0.85rem;
+    color: #c9d1d9;
+    word-break: break-all;
+    line-height: 1.5;
+    padding-right: 40px;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 0.85rem;
+  }
+
+  .copy-btn:hover {
+    background: rgba(34, 211, 238, 0.15);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+  }
+
+  .copy-btn.copied {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+  }
+
+  .copy-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 28px;
+    padding: 16px 20px;
+    background: rgba(34, 211, 238, 0.05);
+    border: 1px solid rgba(34, 211, 238, 0.15);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .footer-note strong {
+    color: var(--accent-cyan);
+  }
+
+  .multi-command {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 24px 12px; }
+    .terminal-title { font-size: 1.4rem; }
+    .script-card-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .code-text { font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal-container">
+
+  <div class="terminal-header">
+    <h2 class="terminal-title">命令终端 · 搭建脚本</h2>
+    <p class="terminal-subtitle">选择脚本一键复制，在 SSH 终端中粘贴即可执行</p>
+  </div>
+
+  <div class="scripts-list">
+
+    <!-- TMS 面板 -->
+    <div class="script-card">
+      <div class="script-card-header">
+        <div class="script-name-row">
+          <div class="script-badge badge-tms">T</div>
+          <div>
+            <div class="script-name">TMS 面板</div>
+            <div class="script-desc">流量转发管理面板，多机集中监控与调度</div>
+          </div>
+        </div>
+        <div class="script-tag">Traffic · Panel</div>
+      </div>
+      <div class="code-block-wrapper">
+        <div class="code-text" id="code-1">curl -L https://raw.githubusercontent.com/Teminuosi/Tms/main/panel_install.sh -o panel_install.sh && chmod +x panel_install.sh && ./panel_install.sh</div>
+        <button class="copy-btn" onclick="copyCode('code-1', this)" title="一键复制">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- S-UI 面板 -->
+    <div class="script-card">
+      <div class="script-card-header">
+        <div class="script-name-row">
+          <div class="script-badge badge-sui">S</div>
+          <div>
+            <div class="script-name">S-UI 面板</div>
+            <div class="script-desc">Sing-box 可视化管理面板，支持多协议节点</div>
+          </div>
+        </div>
+        <div class="script-tag">Sing-box · Panel</div>
+      </div>
+      <div class="code-block-wrapper">
+        <div class="code-text" id="code-2">SUI_AUTO=1 bash &lt;(curl -Ls https://raw.githubusercontent.com/Teminuosi/s-ui/main/install.sh)</div>
+        <button class="copy-btn" onclick="copyCode('code-2', this)" title="一键复制">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3X-UI 面板 -->
+    <div class="script-card">
+      <div class="script-card-header">
+        <div class="script-name-row">
+          <div class="script-badge badge-3xui">3X</div>
+          <div>
+            <div class="script-name">3X-UI 面板</div>
+            <div class="script-desc">Xray 可视化管理面板，支持多种协议</div>
+          </div>
+        </div>
+        <div class="script-tag">Xray · Panel</div>
+      </div>
+      <div class="multi-command">
+        <div class="code-block-wrapper has-label">
+          <div class="code-label warning">方式一：带域名（自动申请SSL证书）⚠ panel.example.com 替换为你自己的域名</div>
+          <div class="code-text" id="code-3">XUI_DOMAIN=panel.example.com bash &lt;(curl -Ls https://raw.githubusercontent.com/Teminuosi/3x-ui/main/install.sh)</div>
+          <button class="copy-btn" onclick="copyCode('code-3', this)" title="一键复制">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="code-block-wrapper has-label">
+          <div class="code-label">方式二：不带域名（随机端口，不申请证书）</div>
+          <div class="code-text" id="code-4">XUI_AUTO=1 bash &lt;(curl -Ls https://raw.githubusercontent.com/Teminuosi/3x-ui/main/install.sh)</div>
+          <button class="copy-btn" onclick="copyCode('code-4', this)" title="一键复制">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sing-box -->
+    <div class="script-card">
+      <div class="script-card-header">
+        <div class="script-name-row">
+          <div class="script-badge badge-singbox">SB</div>
+          <div>
+            <div class="script-name">Sing-box</div>
+            <div class="script-desc">新一代通用代理平台，支持多种入站/出站</div>
+          </div>
+        </div>
+        <div class="script-tag">sing-box · Proxy</div>
+      </div>
+      <div class="code-block-wrapper">
+        <div class="code-text" id="code-5">bash &lt;(wget -qO- https://raw.githubusercontent.com/fscarmen/sing-box/main/sing-box.sh)</div>
+        <button class="copy-btn" onclick="copyCode('code-5', this)" title="一键复制">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 极光面板 -->
+    <div class="script-card">
+      <div class="script-card-header">
+        <div class="script-name-row">
+          <div class="script-badge badge-aurora">A</div>
+          <div>
+            <div class="script-name">极光面板</div>
+            <div class="script-desc">Aurora Admin Panel，多节点可视化管理面板</div>
+          </div>
+        </div>
+        <div class="script-tag">Aurora · Panel</div>
+      </div>
+      <div class="code-block-wrapper">
+        <div class="code-text" id="code-6">bash &lt;(curl -fsSL https://raw.githubusercontent.com/Aurora-Admin-Panel/deploy/main/install.sh)</div>
+        <button class="copy-btn" onclick="copyCode('code-6', this)" title="一键复制">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-note">
+    以上命令需在 <strong>Linux VPS</strong> 上以 <strong>root</strong> 身份执行，建议使用 SSH 工具连接后粘贴运行。
+  </div>
+
+</div>
+
+<script>
+function copyCode(id, btn) {
+  var el = document.getElementById(id);
+  var text = el.innerText;
+  var textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    btn.classList.add('copied');
+    var originalHTML = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      btn.innerHTML = originalHTML;
+    }, 2000);
+  } catch(e) {
+    alert('复制失败，请手动选择文本复制');
+  }
+  document.body.removeChild(textarea);
+}
+</script>
+
+</body>
+</html>
