@@ -637,51 +637,50 @@
   <div class="air-item"><a href="https://link4.com" target="_blank"><span>📚</span><div class="text"><h4>教程 + 工具</h4><p>全套打包</p></div></a></div>
 </div></div></div>
 <div class="modal" id="m18">
-  <div class="modal-box">
-    <div class="modal-close" onclick="closeAll()">×</div>
-    <div class="modal-title">▶ 视频搭建教程</div>
-    <div class="air-grid">
-      <div class="air-item">
-        <a href="https://www.geto.run" target="_blank">
-          <span>▶️</span>
-          <div class="text">
-            <h4>视频教程</h4>
-            <p>ip连接ssh工具，在ssh工具内运行网页内的脚本，一直确认即可完成搭建</p>
-          </div>
-        </a>
-      </div>
-      <div class="air-item">
-        <a href="https://www.hostbuf.com/" target="_blank">
-          <span>💻</span>
-          <div class="text">
-            <h4>SSH连接软件</h4>
-            <p>搭建节点专用工具</p>
-          </div>
-        </a>
-      </div>
-      <!-- 新增：手机搭建工具 -->
-      <div class="air-item">
-        <a href="#" target="_blank">
-          <span>📱</span>
-          <div class="text">
-            <h4>手机搭建工具</h4>
-            <p>手机不方便下载ssh工具，用这个网页版就好</p>
-          </div>
-        </a>
-      </div>
-      <!-- 新增：命令终端 -->
-      <div class="air-item">
-        <a href="#" target="_blank">
-          <span>＞_</span>
-          <div class="text">
-            <h4>命令终端</h4>
-            <p>一键搭建命令和3xui面板等</p>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
+   <div class="modal-box">
+     <div class="modal-close" onclick="closeAll()">×</div>
+     <div class="modal-title">▶ 视频搭建教程</div>
+     <div class="air-grid">
+       <div class="air-item">
+         <a href="https://www.geto.run" target="_blank">
+           <span>▶️</span>
+           <div class="text">
+             <h4>视频教程</h4>
+             <p>ip连接ssh工具，在ssh工具内运行网页内的脚本，一直确认即可完成搭建</p>
+           </div>
+         </a>
+       </div>
+       <div class="air-item">
+         <a href="https://www.hostbuf.com/" target="_blank">
+           <span>💻</span>
+           <div class="text">
+             <h4>SSH连接软件</h4>
+             <p>搭建节点专用工具</p>
+           </div>
+         </a>
+       </div>
+       <!-- 手机搭建工具 -->
+       <div class="air-item">
+         <a href="https://jp.webssh.me/" target="_blank">
+           <span>📱</span>
+           <div class="text">
+             <h4>手机搭建工具</h4>
+             <p>手机不方便下载ssh工具，用这个网页版就好</p>
+           </div>
+         </a>
+       </div>
+       <!-- 命令终端，点击打开m4弹窗，和首页命令终端内容一致 -->
+       <div class="air-item" onclick="openModal(4)">
+         <span>＞_</span>
+         <div class="text">
+           <h4>命令终端</h4>
+           <p>一键搭建命令和3xui面板等</p>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+
 <script>
 function openModal(n){closeAll();document.getElementById('m'+n).style.display='block';}
 function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.style.display='none');}
