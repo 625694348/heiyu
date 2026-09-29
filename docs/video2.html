@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>个人独享网络节点一键搭建教程</title>
+<title>个人独享网络节点3x-ui面板搭建教程</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -111,7 +111,7 @@
     <p class="desc">复制下方命令，粘贴到 SSH 中执行即可完成安装。</p>
     <div class="card">
       <div class="code-row">
-        <div class="code-block" id="cmd">bash <(curl -fsSL https://www.geto.im/oneclick/install.sh)</div>
+        <div class="code-block" id="cmd">VERSION=v3.6.0 && bash <(curl -Ls "https://raw.githubusercontent.com/mhsanaei/3x-ui/$VERSION/install.sh") $VERSION</div>
         <button class="btn btn-copy" onclick="copyCmd(this)">复制命令</button>
       </div>
     </div>
